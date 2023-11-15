@@ -49,14 +49,19 @@ class Customer(models.Model):
 
 
 class Orders(models.Model):
-    options = {
+    status_opt = {
         ("pending", "Pending"),
         ("processing", "Processing"),
         ("shipped", "Shipped"),
         ("completed", "Completed"),
     }
 
-    Status = models.CharField(max_length=20, choices=options, default="pending")
+    PaymentStatus_opt = {("unpaid", "Unpaid"), ("paid", "Paid")}
+
+    Status = models.CharField(max_length=20, choices=status_opt, default="pending")
+    PaymentStatus = models.CharField(
+        max_length=20, choices=PaymentStatus_opt, default="unpaid"
+    )
     OrderID = models.IntegerField(primary_key=True)
     OrderDate = models.DateField()
     CustomerID = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -76,14 +81,15 @@ class Shipment(models.Model):
 
     ShipmentStatus = models.CharField(max_length=20, choices=options, default="partial")
     ShipmentID = models.IntegerField(primary_key=True)
-    ShipmentDate = models.DateField()
     OrderID = models.ForeignKey(Orders, on_delete=models.CASCADE)
 
 
 class ShipmentItems(models.Model):
     ShipmentID = models.ForeignKey(Shipment, on_delete=models.CASCADE)
     ProductID = models.ForeignKey(Product, on_delete=models.CASCADE)
+    ProductionID = models.ForeignKey(Production, on_delete=models.CASCADE, default="")
     QuantityShipped = models.IntegerField(primary_key=True)
+    ShipmentDate = models.DateField()
 
 
 class ProductReturn(models.Model):
