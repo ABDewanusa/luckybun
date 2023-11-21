@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand logo" href="#">LuckyBun</a>
+        <a class="navbar-brand logo" href="{% url 'Dashboard' %}">LuckyBun</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -8,40 +8,34 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Dashboard</a>
+                    <a class="nav-link" href="{% url 'Dashboard' %}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Orders</a>
+                    <a class="nav-link" href="{% url 'Orders' %}">Orders</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Products</a>
+                    <a class="nav-link" href="{% url 'Shipments' %}">Shipments</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Customers</a>
+                    <a class="nav-link" href="{% url 'Returns' %}">Returns</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Inventory</a>
+                    <a class="nav-link" href="{% url 'Customers' %}">Customers</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Production</a>
+                    <a class="nav-link" href="{% url 'Products' %}">Products</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Accounting</a>
+                    <a class="nav-link" href="{% url 'Ingredients' %}">Ingredients</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Employees</a>
+                    <a class="nav-link" href="{% url 'Inventory' %}">Inventory</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Reports</a>
+                    <a class="nav-link" href="{% url 'Accounting' %}">Accounting</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Settings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Notifications</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                    <a class="nav-link" href="{% url 'Settings' %}">Settings</a>
                 </li>
 
             </ul>

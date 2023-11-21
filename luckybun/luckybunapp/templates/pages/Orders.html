@@ -1,0 +1,61 @@
+{% extends "base/base.html" %}
+{% block body %}
+
+<div class="row">
+    <!-- Create New Order Button -->
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary float-end" data-toggle="modal" data-target="#createOrderModal">
+                Create New Order
+            </button>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <!-- Orders Table -->
+        <table class="table">
+            <thead>
+                <tr class="align-middle ">
+                    <th>Order ID</th>
+                    <th>
+                        #
+                    </th>
+                    <!-- <th>Order Date</th> -->
+                    <th>Status</th>
+                    <!-- <th>Payment</th> -->
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through orders and populate table rows -->
+                {% for order in orders %}
+                <tr class="align-middle">
+                    <td>{{ order.OrderID }}</td>
+                    <td>
+                        {{ order.CustomerID.Name }}
+                        <br>
+                        {{ order.OrderDate }}
+
+                    </td>
+
+                    <td>
+                        {{ order.Status }}
+                        <br>
+                        {{ order.PaymentStatus }}
+                    </td>
+
+                    <td>
+                        <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                            data-target="#detailsModal{{ order.OrderID }}">
+                            ...
+                        </button>
+                    </td>
+                </tr>
+                <!-- Add other rows as needed -->
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock body %}

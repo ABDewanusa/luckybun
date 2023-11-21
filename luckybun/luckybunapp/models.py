@@ -6,9 +6,9 @@ from django.db import models
 
 class Item(models.Model):
     options = {
-        ("ingredient", "Ingredient"),
-        ("tool", "Tool"),
-        ("inventory", "Inventory"),
+        ("Ingredient", "Ingredient"),
+        ("Tool", "Tool"),
+        ("Inventory", "Inventory"),
     }
 
     ItemID = models.IntegerField(primary_key=True)
@@ -50,19 +50,19 @@ class Customer(models.Model):
 
 class Orders(models.Model):
     status_opt = {
-        ("pending", "Pending"),
-        ("processing", "Processing"),
-        ("shipped", "Shipped"),
-        ("completed", "Completed"),
+        ("Pending", "Pending"),
+        ("Processing", "Processing"),
+        ("Shipped", "Shipped"),
+        ("Completed", "Completed"),
     }
 
-    PaymentStatus_opt = {("unpaid", "Unpaid"), ("paid", "Paid")}
+    PaymentStatus_opt = {("Unpaid", "Unpaid"), ("Paid", "Paid")}
 
-    Status = models.CharField(max_length=20, choices=status_opt, default="pending")
-    PaymentStatus = models.CharField(
-        max_length=20, choices=PaymentStatus_opt, default="unpaid"
-    )
     OrderID = models.IntegerField(primary_key=True)
+    Status = models.CharField(max_length=20, choices=status_opt, default="Pending")
+    PaymentStatus = models.CharField(
+        max_length=20, choices=PaymentStatus_opt, default="Unpaid"
+    )
     OrderDate = models.DateField()
     CustomerID = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
@@ -75,11 +75,11 @@ class OrderItems(models.Model):
 
 class Shipment(models.Model):
     options = {
-        ("partial", "Partial"),
-        ("complete", "Complete"),
+        ("Partial", "Partial"),
+        ("Complete", "Complete"),
     }
 
-    ShipmentStatus = models.CharField(max_length=20, choices=options, default="partial")
+    ShipmentStatus = models.CharField(max_length=20, choices=options, default="Partial")
     ShipmentID = models.IntegerField(primary_key=True)
     OrderID = models.ForeignKey(Orders, on_delete=models.CASCADE)
 
@@ -159,8 +159,8 @@ class ItemPurchase(models.Model):
 
 class Post(models.Model):
     options = {
-        ("draft", "Draft"),
-        ("published", "Published"),
+        ("Draft", "Draft"),
+        ("Published", "Published"),
     }
 
     title = models.CharField(max_length=250)
@@ -172,7 +172,7 @@ class Post(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=10, choices=options, default="draft")
+    status = models.CharField(max_length=10, choices=options, default="Draft")
 
     class Meta:
         ordering = ("created_at",)
