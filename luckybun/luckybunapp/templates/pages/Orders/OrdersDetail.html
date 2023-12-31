@@ -1,0 +1,248 @@
+{% extends "base/base.html" %}
+{% block body %}
+
+<div class="row">
+    <div class="col">
+        <form action="{% url 'OrdersEdit' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" name="OrderID" value="{{OrderID}}" class="btn btn-primary btn-sm">
+                <b class="bi bi-pencil-square fs-6"> Edit</b>
+            </button>
+        </form>
+    </div>
+    <div class="col">
+        <button type="submit" class="btn btn-danger btn-sm float-end" data-bs-toggle="modal"
+            data-bs-target="#modalDelete">
+            <b class="bi bi-trash fs-6"> Delete</b>
+        </button>
+    </div>
+</div>
+{% if Order.Status == "Shipped" %}
+<div class="row mt-1">
+    <div class="col">
+
+        <form action="{% url 'OrdersDetail' %}" method="POST">
+            {% csrf_token %}
+
+            <input type="hidden" name="OrderID" value="{{OrderID}}">
+
+            <button name="ProcessOrder" value="true" class="btn btn-sm btn-warning float-end">
+                <span class="bi bi-arrow-return-left fs-6"> </span><b class="fs-6"> Return</b>
+            </button>
+
+        </form>
+    </div>
+</div>
+{% endif %}
+<div class="row mt-2">
+    <div class="col">
+        <table class="table-responsive">
+            <tbody>
+                <tr>
+                    <td>Order ID</td>
+                    <td></td>
+                    <td>: {{OrderID}}</td>
+                </tr>
+                <tr>
+                    <td>Customer</td>
+                    <td></td>
+                    <td>: {{ Order.CustomerID.Name }}</td>
+                </tr>
+                <tr>
+                    <td>Order Date</td>
+                    <td></td>
+                    <td>: {{ Order.OrderDate }}</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td></td>
+                    <td>: {{ Order.Status }}</td>
+                </tr>
+                <tr>
+                    <td>Payment Status</td>
+                    <td></td>
+                    <td>: {{ Order.PaymentStatus }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col">
+        <table class="table table-striped table-responsive">
+            <thead class="table-secondary">
+                <tr class="align-middle">
+                    <th>Item</th>
+                    <th>Quantity</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through orders and populate table rows -->
+                {% for orderitem in OrderItems %}
+                <tr class="align-middle">
+                    <td>{{ orderitem.ProductID.Name }}</td>
+                    <td>{{ orderitem.Quantity }}</td>
+
+                </tr>
+                <!-- Add other rows as needed -->
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col">
+        <a href="{% url 'Orders' %}" class="btn btn-primary btn-sm">
+            <span class="bi bi-arrow-left fs-6"></span><b class="fs-6"> Order</b>
+        </a>
+    </div>
+    <div class="col">
+        {% if Order.PaymentStatus == "Unpaid" %}
+
+        <input type="hidden" name="OrderID" value="{{OrderID}}">
+        <button class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#modalTakePayment">
+            <b class="fs-6">Take Payment</b> <span class="bi bi-arrow-right fs-6"></span>
+        </button>
+
+        {% endif %}
+    </div>
+</div>
+
+{% if Order.Status == "Processing"%}
+<div class="row mt-1">
+    <div class="col">
+
+        <form action="{% url 'Orders' %}" method="POST">
+            {% csrf_token %}
+
+            <input type="hidden" name="OrderID" value="{{OrderID}}">
+            <button class="btn btn-success btn-sm float-end">
+                <b class="fs-6">Make Shipment</b> <span class="bi bi-arrow-right fs-6"></span>
+            </button>
+        </form>
+    </div>
+</div>
+{% elif Order.Status == "Pending"%}
+<div class="row mt-1">
+    <div class="col">
+
+        <form action="{% url 'Orders' %}" method="POST">
+            {% csrf_token %}
+
+            <input type="hidden" name="OrderID" value="{{OrderID}}">
+            <button class="btn btn-success btn-sm float-end">
+                <b class="fs-6">Make Shipment</b> <span class="bi bi-arrow-right fs-6"></span>
+            </button>
+        </form>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col">
+
+        <form action="{% url 'OrdersDetail' %}" method="POST">
+            {% csrf_token %}
+
+            <input type="hidden" name="OrderID" value="{{OrderID}}">
+            <button name="ProcessOrder" value="true" class="btn btn-success btn-sm float-end">
+                <b class="fs-6">Process Order</b> <span class="bi bi-arrow-right fs-6"></span>
+            </button>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+
+
+
+
+<!-- modalDelete -->
+<div class="modal fade" id="modalDelete" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Confirm to Delete Order</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span class="fs-5"><b class="text">Order ID: {{OrderID}}</b></span>
+                <br><span class="fs-5">{{Order.CustomerID.Name}}</span>
+                <br><span class="fs-5">{{Order.OrderDate}}</span>
+            </div>
+            <div class="modal-footer">
+                <form action="{% url 'Orders' %}" method="POST">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="OrderID" value="{{OrderID}}">
+                    <button type="submit" name="deleteOrder" value="true" class="btn btn-danger btn-sm float-end">
+                        <b class="bi bi-trash fs-6"> Delete Order</b>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modalTakePayment -->
+<div class="modal fade" id="modalTakePayment" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Take Payment (OrderID: {{OrderID}})</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <span class="fs-6"><b class="text fs-4">{{Order.CustomerID.Name}} </b>({{Order.OrderDate}})</span>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <table class="table">
+                            <thead class="align-middle table-secondary">
+                                <tr>
+                                    <td><b>Product</b></td>
+                                    <td><b>Qty</b></td>
+                                    <td><b>Price</b></td>
+                                    <td><b>Sub Total</b></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for PayDetail in PayDetails %}
+                                <tr>
+                                    <td>
+                                        {{ PayDetail.name }} | {{ PayDetail.description }}
+                                    </td>
+                                    <td>{{ PayDetail.quantity }}</td>
+                                    <td>Rp {{PayDetail.price|floatformat:"2g"}}</td>
+                                    <td>Rp {{PayDetail.subtotal|floatformat:"2g"}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot class="table-secondary">
+                                <tr>
+
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>Total</b></td>
+                                    <td>Rp {{ Total|floatformat:"2g" }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form action="{% url 'Orders' %}" method="POST">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="OrderID" value="{{OrderID}}">
+                    <button disabled type="submit" name="TakePayment" value="true"
+                        class="btn btn-danger btn-sm float-end">
+                        <b class="bi bi-trash fs-6"> Delete Order</b>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

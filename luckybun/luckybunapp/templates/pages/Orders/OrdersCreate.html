@@ -1,0 +1,97 @@
+{% extends "base/base.html" %}
+{% block body %}
+
+<form action="{% url 'OrdersEdit' %}" method="post">
+    {% csrf_token %}
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Order ID</td>
+                        <td></td>
+                        <td>:</td>
+                        <td></td>
+                        <td>{{newOrderID}}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Customer</td>
+                        <td></td>
+                        <td>:</td>
+                        <td></td>
+                        <td>
+                            <select name="selectedCustomerID" class="form-select form-select-sm">
+                                {% for cust in Customers %}
+                                <option value="{{ cust.CustomerID }}">
+                                    {{ cust.Name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Order Date</td>
+                        <td></td>
+                        <td>:</td>
+                        <td></td>
+                        <td>
+                            <input id=selectDate type="date" name="selectedDate" placeholder="pick date"
+                                class="form-control form-control-sm">
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td></td>
+                        <td>:</td>
+                        <td></td>
+                        <td>
+                            <select name="newStatus" class="form-select form-select-sm">
+                                {% for stat in Statuses %}
+                                <option value="{{ stat }}">
+                                    {{ stat }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Payment Status</td>
+                        <td></td>
+                        <td>:</td>
+                        <td></td>
+                        <td>
+                            <select name="newPaymentStatus" class="form-select form-select-sm">
+                                {% for paystat in PaymentStatuses %}
+                                <option value="{{ paystat }}">
+                                    {{ paystat }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col">
+            <input type="hidden" name="newOrderID" value="{{newOrderID}}">
+            <button type="submit" name="createOrder" value="true" class="btn btn-primary btn-sm">
+                <b class="bi bi-floppy fs-6"> Create Order</b>
+            </button>
+        </div>
+    </div>
+</form>
+
+
+<script>
+    window.onload = function () {
+        const myDate = document.getElementById("selectDate");
+        const today = new Date();
+        myDate.value = today.toISOString().slice(0, 10);
+    };
+</script>
+{% endblock body %}

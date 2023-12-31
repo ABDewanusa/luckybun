@@ -3,3 +3,22 @@
 .logo {
     font-family: 'Titillium Web', sans-serif;
 }
+
+.table-wrapper {
+    max-height: 100px;
+    overflow: auto;
+    display: inline-block;
+}
+
+.table-responsive.tbody {
+    max-height: 100px;
+}
+
+.vertical-scrollable>.row {
+    position: absolute;
+    top: 120px;
+    bottom: 100px;
+    left: 180px;
+    width: 50%;
+    overflow-y: scroll;
+}

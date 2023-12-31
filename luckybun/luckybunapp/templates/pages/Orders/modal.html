@@ -1,0 +1,44 @@
+<!-- modalDelete -->
+<div class="modal fade" id="modalDelete" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Confirm to Delete Order</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span class="fs-5"><b class="text"></b></span>
+                <br><span class="fs-5">{{Order.CustomerID.Name}}</span>
+                <br><span class="fs-5">{{Order.OrderDate}}</span>
+            </div>
+            <div class="modal-footer">
+                <form action="{% url 'Orders' %}" method="POST">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="OrderID" value="{{OrderID}}">
+                    <button type="submit" name="deleteOrder" value="true" class="btn btn-danger btn-sm float-end">
+                        <b class="bi bi-trash fs-6"> Delete Order</b>
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const modalDelete = document.getElementById('modalDelete')
+    if (modalDelete) {
+        modalDelete.addEventListener('show.bs.modal', event => {
+            // // Button that triggered the modal
+            const button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            const orderid = button.getAttribute('data-bs-orderid')
+
+            const modalBody = modalDelete.querySelector('.modal-body .text')
+            modalBody.textContent = `OrderID: ${orderid}`
+            const modalInput = modalDelete.querySelector('.modal-footer .orderid')
+            modalInput.value = `${orderid}`
+        })
+    }
+</script>

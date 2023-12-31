@@ -1,0 +1,144 @@
+{% extends "base/base.html" %}
+{% block body %}
+<!-- <h1>{{AccountID}}</h1> -->
+<div class="row mt-3">
+    <div class="col">
+        <form action="{%  url 'Transactions' %}" method="post">
+            {% csrf_token %}
+            <label for="Account">Account:</label>
+            <select name="AccountID" id="Account">
+                {% for account in Accounts %}
+                {% if account.AccountID == AccountID %}<option value="{{account.AccountID}}" selected>{% else %}
+                <option value="{{account.AccountID}}">
+                    {% endif %}
+                    {{account.AccountName}}</option>
+                {% endfor %}
+            </select>
+            <button name="selectAccount" value="true" class="btn btn-primary btn-sm">
+                <b class="bi bi-arrow-repeat fs-6"></b>
+            </button>
+        </form>
+
+    </div>
+    <div class="col">
+        <form action="{%  url 'TransactionsCreate' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="AccountID" value="{{AccountID}}">
+            <button class="btn btn-primary btn-sm float-end">
+                <i class="bi bi-plus-circle"> New Transaction</i>
+            </button>
+        </form>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col">
+        <!-- Orders Table -->
+        <div class="panel panel-default">
+            <div class="panel-body table-responsive" style="max-height: 380px;">
+                <table class="table">
+                    <thead class="table-secondary sticky-top">
+                        <tr class="align-middle">
+                            <th>ID</th>
+                            <th>Description</th>
+                            <th>D/C</th>
+                            <!-- <th>Order Date</th> -->
+                            <th>Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through orders and populate table rows -->
+                        {% for transaction in revTransactions %}
+
+                        {% if transaction.TransactionType == "Credit" %}
+                        <tr class="align-middle table-success">{% else %}
+                        <tr class="align-middle table-danger">{% endif %}
+                            <td>{{ transaction.TransactionID }}</td>
+                            <td>
+                                <span class="fs-6">
+                                    {{ transaction.Description }}
+                                </span>
+                                <br>
+                                <span>
+                                    {{ transaction.TransactionDate }}
+                                </span>
+
+                            </td>
+                            <td>
+                                {{transaction.TransactionType}}
+                            </td>
+                            <td>
+                                Rp {{transaction.Amount|floatformat:"2g"}}
+                            </td>
+                            <td>
+                                <!-- <input type="hidden" name="AccountID" value="{{ AccountID }}">
+                                <input type="hidden" name="TransactionID" value="{{ transaction.TransactionID }}"> -->
+                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-transactionid="{{ transaction.TransactionID }}"
+                                    data-bs-target="#modalDelete">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Add other rows as needed -->
+                        {% endfor %}
+                    </tbody>
+                    <tfoot class="table-secondary sticky-bottom">
+                        <tr class="align-middle">
+                            <th></th>
+                            <th>Total Balance</th>
+                            <th></th>
+                            <!-- <th>Order Date</th> -->
+                            <th>{{TotalAmount}}</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDelete" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Delete Transaction</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="fs-5">Confirm to delete <b class="text"></b></p>
+            </div>
+            <div class="modal-footer">
+                <form action="{% url 'Transactions' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="AccountID" value="{{AccountID}}">
+                    <input class="transactionid" type="hidden" name="TransactionID" value="">
+                    <button type="submit" name="deleteTransaction" value="true" class="btn btn-danger">
+                        <b>Delete</b>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const modalDelete = document.getElementById('modalDelete')
+    if (modalDelete) {
+        modalDelete.addEventListener('show.bs.modal', event => {
+            // // Button that triggered the modal
+            const button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            const transactionid = button.getAttribute('data-bs-transactionid')
+
+            const modalBody = modalDelete.querySelector('.modal-body .text')
+            modalBody.textContent = `TransactionID: ${transactionid}`
+            const modalInput = modalDelete.querySelector('.modal-footer .transactionid')
+            modalInput.value = `${transactionid}`
+        })
+    }
+</script>
+
+
+{% endblock body %}

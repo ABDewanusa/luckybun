@@ -1,0 +1,91 @@
+{% extends "base/base.html" %}
+{% block body %}
+
+<div class="row">
+    <div class="col">
+        <a type="button" href="{% url 'OrdersCreate' %}" class="btn btn-primary ">
+            <i class="bi bi-plus-circle"> Create New Order</i>
+        </a>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col">
+        <div class="panel panel-default">
+            <div class="panel-body table-responsive" style="max-height: 350px;">
+                <table class="table table-striped ">
+                    <thead class="table-secondary sticky-top">
+                        <tr class="align-middle">
+                            <th>Order ID</th>
+                            <th>
+                                Order
+                            </th>
+                            <!-- <th>Order Date</th> -->
+                            <th>Status</th>
+                            <!-- <th>Payment</th> -->
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through orders and populate table rows -->
+                        {% for order in revOrders %}
+                        <tr class=" align-middle">
+                            <td>{{ order.OrderID }}</td>
+                            <td>
+                                <span class="fs-4">
+                                    {{ order.CustomerID.Name }}
+                                </span>
+                                <span>
+                                    {{ order.OrderDate }}
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <span class="badge {% if order.Status == 'Pending' %}bg-warning
+                                    {% elif order.Status == 'Processing' %}bg-primary
+                                    {% elif order.Status == 'Shipped' %}bg-success
+                                    {% endif %} text-wrap">
+                                    {{ order.Status }}
+                                </span>
+                                <span class="badge {% if order.PaymentStatus == 'Unpaid' %}bg-warning
+                                    {% elif order.PaymentStatus == 'Paid' %}bg-success
+                                    {% endif %} text-wrap">
+                                    {{ order.PaymentStatus }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <form action="{% url 'OrdersDetail' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" name="OrderID" value="{{order.OrderID}}"
+                                        class="btn btn-outline-dark">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <!-- Add other rows as needed -->
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-1">
+    <div class="col">
+        <a href="{% url 'Orders' %}" class="btn btn-success float-end">
+            <b class="fs-6">Shipments</b> <span class="bi bi-arrow-right fs-6"></span>
+        </a>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col">
+        <a href="{% url 'Orders' %}" class="btn btn-success float-end">
+            <b class="fs-6">Payments</b> <span class="bi bi-arrow-right fs-6"></span>
+        </a>
+    </div>
+</div>
+{% endblock body %}

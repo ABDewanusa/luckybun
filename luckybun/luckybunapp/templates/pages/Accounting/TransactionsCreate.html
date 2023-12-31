@@ -1,0 +1,70 @@
+{% extends "base/base.html" %}
+{% block body %}
+<div class="card text-bg-info mt-2">
+    <div class="card-body">
+        <form action="{% url 'Transactions' %}" method="post">
+            {% csrf_token %}
+            <div class="row mt-2">
+                <div class="col">
+                    <span>Account Name: <b>{{Account.AccountName}}</b> </span>
+                    <input type="hidden" name="AccountID" value="{{Account.AccountID}}">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <span>Transaction ID:</b> </span>
+                    <input type="number" name="newTransactionID" value="{{newTransactionID}}" readonly>
+
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <label>Transaction Date: Rp</label>
+                    <input id=selectDate type="date" name="TransactionDate" placeholder="pick date"
+                        class="form-control-sm">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-4">
+                    <label>Type: </label>
+                    <select name="TransactionType" class="form-control-sm">
+                        <option value="Credit" selected>Credit</option>
+                        <option value="Debit">Debit</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>Amount: Rp</label>
+                    <input type="number" name="Amount" placeholder="" class="form-control-sm">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <label>Description:</label><br>
+                    <textarea name="Description" id="" cols="40"
+                        placeholder="(sales - dummy1 - 10 mediumbun)"></textarea>
+
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <button type="submit" name="createTransaction" value="true" class="btn btn-primary btn-sm">
+                        <b class="bi bi-floppy fs-6"> Create Transaction</b>
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+
+<script>
+    window.onload = function () {
+        const myDate = document.getElementById("selectDate");
+        const today = new Date();
+        myDate.value = today.toISOString().slice(0, 10);
+    };
+</script>
+
+{% endblock body %}
